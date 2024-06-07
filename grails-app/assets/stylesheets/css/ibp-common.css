@@ -1,0 +1,19 @@
+.data-loader {
+    margin: auto 50%;
+    font-size: xxx-large;
+}
+.invalid-feedback {
+    color : #ff6666!important;
+}
+.status-activate-text {
+    color: green;
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+.status-in-activate-text {
+    color: red;
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}

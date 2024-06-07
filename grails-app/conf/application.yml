@@ -1,0 +1,193 @@
+---
+grails:
+    profile: web
+    codegen:
+        defaultPackage: ibp.admin
+    gorm:
+        reactor:
+            # Whether to translate GORM events into Reactor events
+            # Disabled by default for performance reasons
+            events: false
+
+
+info:
+    app:
+        name: '@info.app.name@'
+        version: '@info.app.version@'
+        grailsVersion: '@info.app.grailsVersion@'
+spring:
+    jmx:
+        unique-names: true
+    main:
+        banner-mode: "off"
+    groovy:
+        template:
+            check-template-location: false
+    devtools:
+        restart:
+            additional-exclude:
+                - '*.gsp'
+                - '**/*.gsp'
+                - '*.gson'
+                - '**/*.gson'
+                - 'logback.groovy'
+                - '*.properties'
+environments:
+    development:
+        management:
+            endpoints:
+                enabled-by-default: true
+                web:
+                    base-path: '/actuator'
+                    exposure:
+                        include: '*'
+    production:
+        management:
+            endpoints:
+                enabled-by-default: false
+server:
+    port: 9099
+---
+grails:
+    mime:
+        disable:
+            accept:
+                header:
+                    userAgents:
+                        - Gecko
+                        - WebKit
+                        - Presto
+                        - Trident
+        types:
+            all: '*/*'
+            atom: application/atom+xml
+            css: text/css
+            csv: text/csv
+            form: application/x-www-form-urlencoded
+            html:
+              - text/html
+              - application/xhtml+xml
+            js: text/javascript
+            json:
+              - application/json
+              - text/json
+            multipartForm: multipart/form-data
+            pdf: application/pdf
+            rss: application/rss+xml
+            text: text/plain
+            hal:
+              - application/hal+json
+              - application/hal+xml
+            xml:
+              - text/xml
+              - application/xml
+    urlmapping:
+        cache:
+            maxsize: 1000
+    controllers:
+        defaultScope: singleton
+        upload:
+            maxFileSize: 104857600 #(100 * 1024 * 1024) 100MB
+            maxRequestSize: 104857600 #(100 * 1024 * 1024) 100MB
+    converters:
+        encoding: UTF-8
+    views:
+        default:
+            codec: html
+        gsp:
+            encoding: UTF-8
+            htmlcodec: xml
+            codecs:
+                expression: html
+                scriptlet: html
+                taglib: none
+                staticparts: none
+
+---
+
+ibp:
+    vendors:
+        upload:
+            fileFormat: [csv]
+            imageFormat: ['jpeg', 'jpg', 'png', 'svg', 'avif']
+            videoFormat: ['mp4']
+
+---
+hibernate:
+    cache:
+        queries: false
+        use_second_level_cache: false
+        use_query_cache: false
+
+dataSource:
+    pooled: true
+    jmxExport: true
+    driverClassName: com.mysql.cj.jdbc.Driver #org.h2.Drive
+    dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    username: sa
+    password: ''
+
+
+
+environments:
+    development:
+        host:
+          url : "http://localhost:9090"
+        dataSource:
+            dbCreate: update
+            url: jdbc:mysql://localhost:3306/ibpdata?characterEncoding=UTF-8
+            username: root
+            password: root
+            logSql: true
+            dialect: MYSQL
+    test:
+
+    production:
+        host :
+            url : "https://ibpadmin.technousdev.com"
+        dataSource:
+            dbCreate: update
+            url: jdbc:mysql://ibp-hub-instance-1.c7zy0j3ynod3.ap-south-1.rds.amazonaws.com:3306/ibphub?characterEncoding=UTF-8
+            username: ibpadmin
+            password: Ibp#Admin2024
+            properties:
+                jmxEnabled: true
+                initialSize: 5
+                maxActive: 50
+                minIdle: 5
+                maxIdle: 25
+                maxWait: 10000
+                maxAge: 600000
+                timeBetweenEvictionRunsMillis: 5000
+                minEvictableIdleTimeMillis: 60000
+                validationQuery: SELECT 1
+                validationQueryTimeout: 3
+                validationInterval: 15000
+                testOnBorrow: true
+                testWhileIdle: true
+                testOnReturn: false
+                jdbcInterceptors: ConnectionState
+                defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+user:
+    file_upload:
+        path: /tmp/ibp/vendor/
+    product_upload:
+        path: /tmp/ibp/product/
+    category_upload:
+        path: /tmp/ibp/category/
+    subCategory_upload:
+        path: /tmp/ibp/subCategory/
+    affiliation_upload:
+        path: /tmp/ibp/affiliation/
+    affiliationProduct_upload:
+        path: /tmp/ibp/affiliationProduct/
+
+micronaut:
+    application:
+        name: watiIntegration
+
+ibp:
+    wati:
+        io:
+           auth-token: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxNmZlMDU2Zi1hMzliLTQ1ZGYtOTc2YS01MWI2M2E0Y2I3YWQiLCJ1bmlxdWVfbmFtZSI6ImFrYXNoLnByYWphcGF0aUB2bmhpbmZvdGVjaC5pbiIsIm5hbWVpZCI6ImFrYXNoLnByYWphcGF0aUB2bmhpbmZvdGVjaC5pbiIsImVtYWlsIjoiYWthc2gucHJhamFwYXRpQHZuaGluZm90ZWNoLmluIiwiYXV0aF90aW1lIjoiMDUvMjcvMjAyNCAwNjowNzowMCIsImRiX25hbWUiOiJtdC1wcm9kLVRlbmFudHMiLCJ0ZW5hbnRfaWQiOiIzMTgxNTUiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBRE1JTklTVFJBVE9SIiwiZXhwIjoyNTM0MDIzMDA4MDAsImlzcyI6IkNsYXJlX0FJIiwiYXVkIjoiQ2xhcmVfQUkifQ.FAF_gQ-ZOwv_hyev9jrbMSzryuM1cvQW2Fiv45Wt-IM
+           api-url: https://live-mt-server.wati.io/318155/
