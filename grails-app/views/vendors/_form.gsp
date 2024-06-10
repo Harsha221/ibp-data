@@ -945,7 +945,7 @@
 
 <div class="form-group form-actions">
     <div class="col-md-12" style="text-align: right;padding-right: 30px;">
-        <button type="submit" class="btn btn-effect-ripple btn-primary">${actionName in ['create', 'save'] ? 'Create' : 'Updated'}</button>
+        <button type="submit" class="btn btn-effect-ripple btn-primary">${actionName in ['create', 'save'] ? 'Create' : 'Update'}</button>
         <g:if test="${params.name.equals("businessList")}">
             <g:link action="businessList" class="btn btn-effect-ripple btn-default reset_btn" >Back</g:link>
         </g:if>

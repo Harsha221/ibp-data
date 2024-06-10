@@ -30,6 +30,7 @@ class VendorsController {
     def sendOtp() {
         try {
             def vendor = otpService.generateOtp(params.mobileNo)
+            sendOTPToMobile(vendor.mobileNo, vendor.otp)
             if (vendor)
                 render(view: "verifyOtp", model: [mobileNo: params.mobileNo])
         } catch (Exception e) {
@@ -69,7 +70,7 @@ class VendorsController {
 
     private void sendOTPToMobile(String mobileNo, String otp) {
 
-        String OTP = "222230"
+        String OTP = otp
         String EXPIRE_MINUTES = "5"
         String expireMinutes = (5 * 60).toString()
         String generatedMessage = "Dear user, ${OTP} is OTP for your login at IBPHub, This code expires in ${EXPIRE_MINUTES} minutes. Never share OTP with anyone. Ameya Information Ltd.".replace(OTP, otp).replace(EXPIRE_MINUTES, expireMinutes)
@@ -79,13 +80,13 @@ class VendorsController {
                 .withPassword("579608280c4b4f6092107b252d3d03f8")
                 .withToNumber("+91" + mobileNo)
                 .withSenderId("IBPHUB")
-                .withTemplateId(configService.getPropertyValue(ConfigConstant.IBP_SMS_IDEA_TEMPLATE_ID))
+                .withTemplateId("IBPHUB")
                 .withMessage(generatedMessage)
                 .build()
 
         try {
             // Url that will be called to submit the message
-            URL sendUrl = new URL(configService.getPropertyValue(ConfigConstant.IBP_SMS_IDEA_API_URL) + "/smsstatuswithid.aspx")
+            URL sendUrl = new URL("https://smsidea.co.in/smsstatuswithid.aspx")
             HttpURLConnection httpConnection = (HttpURLConnection) sendUrl.openConnection()
             httpConnection.setRequestMethod("POST")
             httpConnection.setDoInput(true)
@@ -452,7 +453,7 @@ class VendorsController {
 
 
             products?.eachWithIndex { it, index ->
-              def vendorProductList = new VendorProductList(vendorProductListId: UUID.randomUUID(),
+                def vendorProductList = new VendorProductList(vendorProductListId: UUID.randomUUID(),
                         vendorBusiness: vendorBusinessDetails,
                         category: it?.category, categoryName: it?.category?.name,
                         subCategory: it?.subCategory, subCategoryName: it?.subCategory?.name,
@@ -461,10 +462,10 @@ class VendorsController {
                 auditLogsService.logAction('Save',VendorProductList.class.simpleName,vendorProductList?.id,userService?.getLoggedInUser()?.username,(vendorProductList as JSON).toString(false),(vendorProductList as JSON).toString(false))
 
 
-              //  subcategoryname += it?.subCategory?.name
+                //  subcategoryname += it?.subCategory?.name
                 subcategoryname.add(it?.subCategory?.name)
 
-              //  productname += it?.name
+                //  productname += it?.name
                 productname.add(it?.name)
 
             }
@@ -630,7 +631,7 @@ class VendorsController {
 
             vendorCreateCommand?.imageFiles?.each {
                 if (!it.empty) {
-                   // String imageId = UUID.randomUUID()
+                    // String imageId = UUID.randomUUID()
                     vendorsService.saveVendorMedia(vendorBusinessDetails,MediaType.IMAGE_VIDEO.value,it,vendors?.vendorId)
 
 
