@@ -140,6 +140,16 @@ environments:
             password: root
             logSql: true
             dialect: MYSQL
+        aws:
+            servicerole:
+                region: ap-south-1
+            s3:
+                ibphub:
+                    bucket-name: ibp-hub
+                    folder-name: 'dev/'
+                    base-url: 'https://ibp-hub.s3.ap-south-1.amazonaws.com'
+                    access-key: 'AKIAVOK244OR4TAR5HDS'
+                    secret-key: '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'
     test:
 
     production:
@@ -168,6 +178,16 @@ environments:
                 testOnReturn: false
                 jdbcInterceptors: ConnectionState
                 defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+        aws:
+            servicerole:
+                region: ap-south-1
+            s3:
+                ibphub:
+                    bucket-name: ibp-hub
+                    folder-name: 'prod/'
+                    base-url: 'https://ibp-hub.s3.ap-south-1.amazonaws.com'
+                    access-key: 'AKIAVOK244OR4TAR5HDS'
+                    secret-key: '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'
 user:
     file_upload:
         path: /tmp/ibp/vendor/
