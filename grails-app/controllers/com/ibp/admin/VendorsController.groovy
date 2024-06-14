@@ -46,9 +46,10 @@ class VendorsController {
     }
 
     def authenticate() {
-        if (otpService.validateOtp(params.mobileNo, params.otp)) {
+        def mobileNoWithoutCountryCode = params.mobileNo.substring(2)
+        if (otpService.validateOtp(mobileNoWithoutCountryCode, params.otp)) {
             Map<String, String> vendorMap = new HashMap<>()
-            vendorMap.put("name", params?.mobileNo)
+            vendorMap.put("name", mobileNoWithoutCountryCode)
             VendorBusinessDetails vendor = vendorsService.list(vendorMap).get(0)
             request.withFormat {
                 form multipartForm {
