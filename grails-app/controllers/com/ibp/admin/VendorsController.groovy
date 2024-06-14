@@ -411,6 +411,13 @@ class VendorsController {
         def oldVendor = vendors.clone()
         vendors.mobileNo = vendorCreateCommand?.primaryPhoneNumber
         vendors.email = vendorCreateCommand?.businessEmail
+
+        // if data is verified by Vendor
+        if (params?.name?.equals("unknown")) {
+            log.info('record updated by Vendor')
+            vendors.setModifiedByVendor(true)
+        }
+
         vendorsService.save(vendors)
         auditLogsService.logAction('Update',vendors.class.simpleName,vendors?.id,userService?.getLoggedInUser()?.username,(oldVendor as JSON).toString(false),(vendors as JSON).toString(false))
 
