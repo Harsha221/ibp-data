@@ -9,7 +9,8 @@ import java.time.ZoneId
 class OtpService {
 
     def generateOtp(String mobileNo) {
-        def vendor = Vendors.findByMobileNo(mobileNo)
+        def mobileNoWithoutCountryCode = mobileNo.substring(2)
+        def vendor = Vendors.findByMobileNo(mobileNoWithoutCountryCode)
         if (!vendor) {
             throw new IllegalArgumentException("Vendor not found")
         }
