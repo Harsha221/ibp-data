@@ -80,7 +80,7 @@ class SendMessageDTO {
         }
     }
 
-    static void main(String[] args) {
+    /*static void main(String[] args) {
         try {
             String message = "Dear user, 222230 is OTP for your login at IBPHub, This code expires in 30 seconds. Never share OTP with anyone. Ameya Information Ltd."
             // Below example is for sending Plain text
@@ -96,5 +96,5 @@ class SendMessageDTO {
         } catch (Exception ex) {
             ex.printStackTrace()
         }
-    }
+    }*/
 }
