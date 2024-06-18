@@ -9,14 +9,13 @@ import java.time.ZoneId
 class OtpService {
 
     def generateOtp(String mobileNo) {
-        def mobileNoWithoutCountryCode = mobileNo.substring(2)
-        def vendor = Vendors.findByMobileNo(mobileNoWithoutCountryCode)
+        def vendor = Vendors.findByMobileNo(mobileNo)
         if (!vendor) {
             throw new IllegalArgumentException("Vendor not found")
         }
 
-//        String otp = (100000 + new Random().nextInt(900000)).toString()
-        String otp = "123456"
+        String otp = (100000 + new Random().nextInt(900000)).toString()
+//        String otp = "123456"
 
         // Convert LocalDateTime to Date
         LocalDateTime expiryTime = LocalDateTime.now().plusMinutes(360)

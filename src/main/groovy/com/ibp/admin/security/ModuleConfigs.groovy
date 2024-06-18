@@ -11,7 +11,7 @@ class ModuleConfigs {
 
             // Vendor Module
             ModulePermissions.build('Vendor Management', 'Create', [SecuredUrls.VENDORS_CREATE, SecuredUrls.VENDORS_SAVE]),
-            ModulePermissions.build('Vendor Management', 'Edit', [SecuredUrls.VENDORS_EDIT, SecuredUrls.VENDORS_UPDATE]),
+//            ModulePermissions.build('Vendor Management', 'Edit', [SecuredUrls.VENDORS_EDIT, SecuredUrls.VENDORS_UPDATE]),
             ModulePermissions.build('Vendor Management', 'Approve', [SecuredUrls.VENDORS_APPROVE]),
             ModulePermissions.build('Vendor Management', 'View', [SecuredUrls.VENDORS_VIEW]),
             ModulePermissions.build('Vendor Management', 'Upload', [SecuredUrls.VENDORS_UPLOADS, SecuredUrls.VENDORS_CREATE_UPLOAD, SecuredUrls.VENDORS_SAVE_UPLOAD,

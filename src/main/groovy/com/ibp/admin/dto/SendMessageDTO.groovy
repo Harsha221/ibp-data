@@ -28,21 +28,13 @@ class SendMessageDTO {
         this.toNumber = toNumber;
         this.senderId = senderid;
         this.templateId = templateId;
-        this.peId = peId
-    }
-
-    SendMessageDTO(String senderMobileNo, String password, String message, String toNumber, String senderid) {
-        this.senderMobileNo = senderMobileNo;
-        this.password = password;
-        this.message = message;
-        this.toNumber = toNumber;
-        this.senderId = senderid;
+        this.peId = peId;
     }
 
     private void submitMessage() {
         try {
 // Url that will be called to submit the message
-            URL sendUrl = new URL("https://smsidea.co.in/smsstatuswithid.aspx");
+            URL sendUrl = new URL("https://www.smsidea.co.in/smsstatuswithid.aspx");
             HttpURLConnection httpConnection = (HttpURLConnection) sendUrl.openConnection();
 // This method sets the method type to POST so that will be send as a POST request.
             httpConnection.setRequestMethod("POST");
@@ -59,7 +51,9 @@ class SendMessageDTO {
                     + URLEncoder.encode(this.password, "UTF-8") + "&senderid="
                     + URLEncoder.encode(this.senderId, "UTF-8") + "&to="
                     + URLEncoder.encode(this.toNumber, "UTF-8") + "&msg="
-                    + URLEncoder.encode(this.message, "UTF-8") + "&restype=json");
+                    + URLEncoder.encode(this.message, "UTF-8") + "&templateid="
+                    + URLEncoder.encode(this.templateId, "UTF-8") + "&peid="
+                    + URLEncoder.encode(this.peId, "UTF-8") + "&restype=json");
             dataStreamToServer.flush();
             dataStreamToServer.close();
             // Here take the output value of the server.
