@@ -7,13 +7,6 @@
                 <span class="mm-text ">Dashboard</span>
             </g:link>
         </li>--}%
-            <sec:access url="/watiIntegration/*">
-                <li class="${controllerName == 'watiIntegration' ? 'active' : ''}">
-                    <g:link controller="watiIntegration">
-                        <i class="menu-icon fa fa-user"></i><span class="mm-text ">watiIntegration</span>
-                    </g:link>
-                </li>
-            </sec:access>
             <sec:access url="/vendors/*">
                 <li class="menu-dropdown ${controllerName == 'vendors' ? 'active' : ''}">
                     <a href="javascript:void(0)">
@@ -38,20 +31,6 @@
                             </g:link>
                         </li>
                     </ul>
-                </li>
-            </sec:access>
-            <sec:access url="/role/*">
-                <li class="${controllerName == 'role' ? 'active' : ''}">
-                    <g:link controller="role">
-                        <i class="menu-icon fa fa-user"></i><span class="mm-text ">Role Management</span>
-                    </g:link>
-                </li>
-            </sec:access>
-            <sec:access url="/user/*">
-                <li class="${controllerName == 'user' ? 'active' : ''}">
-                    <g:link controller="user">
-                        <i class="menu-icon fa fa-user"></i><span class="mm-text ">User Management</span>
-                    </g:link>
                 </li>
             </sec:access>
             <sec:access url="/category/*">
@@ -98,22 +77,6 @@
                             </li>
                         </sec:access>
                     </ul>
-                </li>
-            </sec:access>
-            <sec:access url="/advertisement/*">
-                <li class="${controllerName == 'advertisement' ? 'active' : ''}">
-                    <g:link controller="advertisement">
-                        <i class="menu-icon fa fa-newspaper-o"></i>
-                        <span class="mm-text ">Advertisements</span>
-                    </g:link>
-                </li>
-            </sec:access>
-            <sec:access url="/association/*">
-                <li class="${controllerName == 'association' ? 'active' : ''}">
-                    <g:link controller="association">
-                        <i class="menu-icon ti-desktop"></i>
-                        <span class="mm-text ">Association</span>
-                    </g:link>
                 </li>
             </sec:access>
 

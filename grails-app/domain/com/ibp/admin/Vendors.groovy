@@ -14,6 +14,7 @@ class Vendors extends BaseDomain implements Cloneable, UserDetails {
     String createdBy
     String otp
     Date otpExpiry
+    Boolean modifiedByVendor = false    // for Vendors when they verify their data
 
     static constraints = {
         vendorId blank: true, nullable: true, unique: true

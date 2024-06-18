@@ -7,7 +7,7 @@ class SecuredUrls {
     public static final String VENDORS_CREATE = '/vendors/create'
     public static final String VENDORS_SAVE = '/vendors/save'
     public static final String VENDORS_EDIT = '/vendors/edit/**'
-    public static final String VENDORS_UPDATE = '/vendors/update/**'
+//    public static final String VENDORS_UPDATE = '/vendors/update/**'
     public static final String VENDORS_APPROVE = '/vendors/approve/**'
     public static final String VENDORS_VIEW = '/vendors/*'
     // WatiIntegration Module

@@ -29,7 +29,8 @@ class VendorsController {
 
     def sendOtp() {
         try {
-            def vendor = otpService.generateOtp(params.mobileNo)
+            def mobileNoWithoutCountryCode = params.mobileNo.substring(2)
+            def vendor = otpService.generateOtp(mobileNoWithoutCountryCode)
             sendOTPToMobile(vendor.mobileNo, vendor.otp)
             if (vendor)
                 render(view: "verifyOtp", model: [mobileNo: params.mobileNo])
@@ -46,9 +47,10 @@ class VendorsController {
     }
 
     def authenticate() {
-        if (otpService.validateOtp(params.mobileNo, params.otp)) {
+        def mobileNoWithoutCountryCode = params.mobileNo.substring(2)
+        if (otpService.validateOtp(mobileNoWithoutCountryCode, params.otp)) {
             Map<String, String> vendorMap = new HashMap<>()
-            vendorMap.put("name", params?.mobileNo)
+            vendorMap.put("name", mobileNoWithoutCountryCode)
             VendorBusinessDetails vendor = vendorsService.list(vendorMap).get(0)
             request.withFormat {
                 form multipartForm {
@@ -71,17 +73,19 @@ class VendorsController {
     private void sendOTPToMobile(String mobileNo, String otp) {
 
         String OTP = otp
-        String EXPIRE_MINUTES = "5"
+        String EXPIRE_MINUTES = "300"
         String expireMinutes = (5 * 60).toString()
-        String generatedMessage = "Dear user, ${OTP} is OTP for your login at IBPHub, This code expires in ${EXPIRE_MINUTES} minutes. Never share OTP with anyone. Ameya Information Ltd.".replace(OTP, otp).replace(EXPIRE_MINUTES, expireMinutes)
+        String generatedMessage = "Dear user, ${OTP.replace(OTP, otp)} is OTP for your login at IBPHub, This code expires in ${EXPIRE_MINUTES.replace(EXPIRE_MINUTES, expireMinutes)} seconds. Never share OTP with anyone. Ameya Information Ltd."
 
         SendMessageDTO messageDTO = SendMessageDTO.builder()
                 .withSenderMobileNo("9825217616")
                 .withPassword("579608280c4b4f6092107b252d3d03f8")
-                .withToNumber("+91" + mobileNo)
+                .withToNumber(mobileNo)
                 .withSenderId("IBPHUB")
-                .withTemplateId("IBPHUB")
+//                .withTemplateId("IBPHUB")
+                .withTemplateId("1207170505685026437")
                 .withMessage(generatedMessage)
+                .withPeId("1201159886408760288")
                 .build()
 
         try {
@@ -98,7 +102,8 @@ class VendorsController {
                     + URLEncoder.encode(messageDTO.password, "UTF-8") + "&senderid="
                     + URLEncoder.encode(messageDTO.senderId, "UTF-8") + "&to="
                     + URLEncoder.encode(messageDTO.toNumber, "UTF-8") + "&msg="
-                    + URLEncoder.encode(messageDTO.message, "UTF-8") + "&restype=json")
+                    + URLEncoder.encode(messageDTO.message, "UTF-8") + "&templateid="
+                    + URLEncoder.encode(messageDTO.templateId, "UTF-8") + "&restype=json")
             dataStreamToServer.flush()
             dataStreamToServer.close()
 
@@ -380,6 +385,7 @@ class VendorsController {
 
     @Transactional
     def update(VendorCreateCommand vendorCreateCommand) {
+        log.info("[update] Entered")
         log.info("remove vendor video media : "+params?.removeVideoMedia)
         if (vendorCreateCommand == null) {
             notFound()
@@ -411,6 +417,13 @@ class VendorsController {
         def oldVendor = vendors.clone()
         vendors.mobileNo = vendorCreateCommand?.primaryPhoneNumber
         vendors.email = vendorCreateCommand?.businessEmail
+
+        // if data is verified by Vendor
+        if (params?.name?.equals("unknown")) {
+            log.info('record updated by Vendor')
+            vendors.setModifiedByVendor(true)
+        }
+
         vendorsService.save(vendors)
         auditLogsService.logAction('Update',vendors.class.simpleName,vendors?.id,userService?.getLoggedInUser()?.username,(oldVendor as JSON).toString(false),(vendors as JSON).toString(false))
 
@@ -664,6 +677,7 @@ class VendorsController {
             return
         }
         if (params.name.equals("businessList")) {
+            log.info "[update] params.name = businessList"
             request.withFormat {
                 form multipartForm {
                     flash.message = 'Vendor updated successfully'
@@ -673,6 +687,7 @@ class VendorsController {
                 '*' { respond vendors, [status: OK] }
             }
         } else if (params.name.equals("unknown")) {
+            log.info "[update] params.name = unknown"
             request.withFormat {
                 form multipartForm {
                     flash.message = 'Vendor record updated successfully'
@@ -682,6 +697,7 @@ class VendorsController {
                 '*' { respond vendors, [status: OK] }
             }
         }else {
+            log.info "[update] params.name = anonymous"
             request.withFormat {
                 form multipartForm {
                     flash.message = 'Vendor updated successfully'

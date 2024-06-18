@@ -14,8 +14,8 @@ class OtpService {
             throw new IllegalArgumentException("Vendor not found")
         }
 
-//        String otp = (100000 + new Random().nextInt(900000)).toString()
-        String otp = "123456"
+        String otp = (100000 + new Random().nextInt(900000)).toString()
+//        String otp = "123456"
 
         // Convert LocalDateTime to Date
         LocalDateTime expiryTime = LocalDateTime.now().plusMinutes(360)

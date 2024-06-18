@@ -127,7 +127,9 @@ dataSource:
     username: sa
     password: ''
 
-
+spring:
+  profiles:
+      active: "production"
 
 environments:
     development:
@@ -154,12 +156,12 @@ environments:
 
     production:
         host :
-            url : "https://ibpadmin.technousdev.com"
+            url : "https://ibpdata.com"
         dataSource:
             dbCreate: update
-            url: jdbc:mysql://ibp-hub-instance-1.c7zy0j3ynod3.ap-south-1.rds.amazonaws.com:3306/ibphub?characterEncoding=UTF-8
-            username: ibpadmin
-            password: Ibp#Admin2024
+            url: jdbc:mysql://172.31.3.221:3306/ibpdata
+            username: ibpdbuser
+            password: Ibp@Db324
             properties:
                 jmxEnabled: true
                 initialSize: 5
