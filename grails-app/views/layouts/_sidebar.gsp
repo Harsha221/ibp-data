@@ -30,6 +30,11 @@
                                 <i class="menu-icon fa fa-list-alt"></i><span class="mm-text ">Business List</span>
                             </g:link>
                         </li>
+                        <li class="${controllerName == 'vendors' && (actionName == 'verifiedByVendors') ? 'active' : ''}">
+                            <g:link controller="vendors" action="verifiedByVendors">
+                                <i class="menu-icon fa fa-list-alt"></i><span class="mm-text ">Verified By Vendors</span>
+                            </g:link>
+                        </li>
                     </ul>
                 </li>
             </sec:access>

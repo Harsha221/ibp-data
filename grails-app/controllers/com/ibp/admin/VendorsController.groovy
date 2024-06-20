@@ -164,6 +164,21 @@ class VendorsController {
         [vendorsList: vendorsList, vendorsCount: vendorsList?.totalCount, params: params]
     }
 
+    def verifiedByVendors(Integer max) {
+        params.max = Math.min(max ?: 20, 100)
+        params.verified = 'false'
+        params.verifiedByVendors = 'true'
+        def vendorsList = vendorsService.listOfVerifiedByVendors(params)
+        if (request.xhr) {
+            render template: 'businessList', model: [
+                    vendorsList : vendorsList,
+                    vendorsCount: vendorsList?.totalCount
+            ]
+            return
+        }
+        [vendorsList: vendorsList, vendorsCount: vendorsList?.totalCount, params: params]
+    }
+
     def create() {
 //        respond new VendorBusinessDetails(params)
     }
@@ -435,6 +450,11 @@ class VendorsController {
             vendorBusinessDetails.category = Category.findById(Long.valueOf(vendorCreateCommand.category))
             vendorBusinessDetails.categoryName = Category.findById(Long.valueOf(vendorCreateCommand.category)).name
             vendorBusinessDetails.location = vendorCreateCommand?.latitude + "," + vendorCreateCommand?.longitude
+
+            if (params?.name?.equals("unknown")) {
+                log.info('record updated by Vendor')
+                vendorBusinessDetails.setModifiedByVendor(true)
+            }
 
             Set<String> subcategoryname = new HashSet<String>()
             Set<String> productname = new HashSet<String>()

@@ -103,6 +103,75 @@ class VendorsService implements UserDetailsService{
     }
 
     @Transactional(readOnly = true)
+    def listOfVerifiedByVendors(Map params) {
+        List<VendorBusinessDetails> vendorBusinessList = VendorBusinessDetails.createCriteria().list(params) {
+            if (params?.name) {
+                or {
+                    ilike('businessName', "%${params?.name}%")
+                    ilike('username', "%${params?.name}%")
+                    ilike('primaryPhoneNumber', "%${params?.name}%")
+                    ilike('businessEmail', "%${params?.name}%")
+                }
+            }
+            if (params?.verified) {
+                boolean isVerified = params?.verified?.equals('true')
+                eq('isVerified', isVerified)
+            }
+            if (params?.verifiedByVendors) {
+                boolean isVerifiedByVendors = params?.verifiedByVendors?.equals('true')
+                eq('modifiedByVendor', isVerifiedByVendors)
+            }
+            if (params?.businessType) {
+                ilike('businessType', "%${params?.businessType}%")
+            }
+            if (params?.category) {
+                category {
+                    ilike('name', "%${params.category}%")
+                }
+            }
+            if (params?.vendorStatus) {
+                if (params?.vendorStatus?.equals(VendorBusinessStatus.SUBMITTED.toString())) {
+                    eq('status', VendorBusinessStatus.SUBMITTED.value)
+                } else if (params?.vendorStatus?.equals(VendorBusinessStatus.VERIFIED.toString())) {
+                    eq('status', VendorBusinessStatus.VERIFIED.value)
+                } else if (params?.vendorStatus?.equals(VendorBusinessStatus.ON_HOLD.toString())) {
+                    eq('status', VendorBusinessStatus.ON_HOLD.value)
+                } else {
+                    eq('status', VendorBusinessStatus.IN_REVIEW.value)
+                }
+            }
+            order("dateCreated", "desc")
+        } as List<VendorBusinessDetails>
+//        List<VendorBusinessDetailsDto> list = []
+//        vendorBusinessList?.each { vendorBusinessDetails ->
+//            VendorBusinessDetailsDto vendorBusinessDetailsDto = new VendorBusinessDetailsDto()
+//            vendorBusinessDetailsDto.with {
+//                id = vendorBusinessDetails.id
+//                vendorId = vendorBusinessDetails.vendor.id
+//                businessName = vendorBusinessDetails.businessName
+//                businessEmail = vendorBusinessDetails?.businessEmail
+//                primaryPhoneNumber = vendorBusinessDetails?.primaryPhoneNumber
+//                businessType = vendorBusinessDetails?.businessType
+//                city = vendorBusinessDetails?.city
+//                district = vendorBusinessDetails?.district
+//                state = vendorBusinessDetails?.state
+//                paid = PaymentStatus?.parsePaymentStatus(vendorBusinessDetails?.paid)?.name
+//                status = UserStatus?.parseUserStatus(vendorBusinessDetails?.status)?.name
+//                lastUpdated = vendorBusinessDetails?.lastUpdatedText
+//                isVerified = vendorBusinessDetails?.isVerified
+//                category = VendorProductList?.findByVendorBusiness(vendorBusinessDetails)?.category?.name
+//            }
+//            list.add(vendorBusinessDetailsDto)
+//        }
+//        if (params?.category) {
+//            list = list?.findAll {
+//                it?.category?.toLowerCase()?.contains(params.category.toString().toLowerCase())
+//            }
+//        }
+        vendorBusinessList
+    }
+
+    @Transactional(readOnly = true)
     def uploadList(Map params) {
         VendorUpload.createCriteria().list(params) {
             if (params?.fileName) {

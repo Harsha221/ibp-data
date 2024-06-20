@@ -70,6 +70,7 @@ class VendorBusinessDetails extends BaseDomain implements Cloneable {
     String alternateContactPerson
 
     String friendlyUrl
+    Boolean modifiedByVendor = false    // for Vendors when they verify their data
 
     static constraints = {
         friendlyUrl unique: true
